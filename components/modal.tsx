@@ -19,13 +19,18 @@ export function Modal({ isOpen, onClose, children, title }: ModalProps) {
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden"
+      window.dispatchEvent(new CustomEvent("modal-open"));
     } else {
       document.body.style.overflow = "unset"
       setIsFullscreen(false) // Reset fullscreen when modal closes
+      window.dispatchEvent(new CustomEvent("modal-close"));
     }
 
     return () => {
       document.body.style.overflow = "unset"
+      if (isOpen) {
+        window.dispatchEvent(new CustomEvent("modal-close"));
+      }
     }
   }, [isOpen])
 

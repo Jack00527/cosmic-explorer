@@ -17,7 +17,7 @@ const planets = [
     distance: "57.9 million km",
     atmosphere: "Extremely thin",
     funFact: "A day on Mercury lasts 176 Earth days",
-    color: "from-gray-400 to-gray-600",
+    image: "/planets/mercury.jpg",
     type: "Terrestrial",
   },
   {
@@ -27,7 +27,7 @@ const planets = [
     distance: "108.2 million km",
     atmosphere: "Dense CO₂",
     funFact: "Hottest planet in the solar system at 462°C",
-    color: "from-yellow-400 to-orange-500",
+    image: "/planets/venus.jpg",
     type: "Terrestrial",
   },
   {
@@ -37,7 +37,7 @@ const planets = [
     distance: "149.6 million km",
     atmosphere: "78% N₂, 21% O₂",
     funFact: "The only known planet with life",
-    color: "from-blue-400 to-green-500",
+    image: "/planets/earth.jpg",
     type: "Terrestrial",
   },
   {
@@ -47,7 +47,7 @@ const planets = [
     distance: "227.9 million km",
     atmosphere: "Thin CO₂",
     funFact: "Home to the largest volcano in the solar system",
-    color: "from-red-500 to-orange-600",
+    image: "/planets/mars.jpg",
     type: "Terrestrial",
   },
   {
@@ -57,7 +57,7 @@ const planets = [
     distance: "778.5 million km",
     atmosphere: "Hydrogen and Helium",
     funFact: "Has over 80 known moons",
-    color: "from-orange-400 to-yellow-600",
+    image: "/planets/jupiter.jpg",
     type: "Gas Giant",
   },
   {
@@ -67,7 +67,7 @@ const planets = [
     distance: "1.43 billion km",
     atmosphere: "Hydrogen and Helium",
     funFact: "Could float in water due to its low density",
-    color: "from-yellow-300 to-amber-500",
+    image: "/planets/saturn.jpg",
     type: "Gas Giant",
   },
   {
@@ -77,7 +77,7 @@ const planets = [
     distance: "2.87 billion km",
     atmosphere: "Hydrogen, Helium, Methane",
     funFact: "Rotates on its side at a 98° tilt",
-    color: "from-cyan-400 to-blue-500",
+    image: "/planets/uranus.jpg",
     type: "Ice Giant",
   },
   {
@@ -87,7 +87,7 @@ const planets = [
     distance: "4.50 billion km",
     atmosphere: "Hydrogen, Helium, Methane",
     funFact: "Has the fastest winds in the solar system",
-    color: "from-blue-500 to-indigo-600",
+    image: "/planets/neptune.jpg",
     type: "Ice Giant",
   },
 ]
@@ -335,11 +335,13 @@ export function PlanetsGrid({ focusedPlanet, onPlanetFocus, onOpenModal }: Plane
                 </Badge>
               </div>
 
-              <div
-                className={`w-20 h-20 rounded-full bg-gradient-to-br ${planet.color} mx-auto mb-6 shadow-lg ${
-                  focusedPlanet === index ? "animate-pulse-glow" : ""
-                }`}
-              />
+              <div className="w-20 h-20 mx-auto mb-6">
+                <img
+                  src={planet.image}
+                  alt={planet.name}
+                  className={`w-full h-full rounded-full object-cover shadow-lg transition-transform duration-300 ${focusedPlanet === index ? "animate-pulse-glow scale-110" : ""}`}
+                />
+              </div>
 
               <div className="space-y-3 text-sm">
                 <div className="flex justify-between">

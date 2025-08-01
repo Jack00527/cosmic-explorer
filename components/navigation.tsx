@@ -47,11 +47,25 @@ export function Navigation() {
       }
     }
 
+    const handleModalOpen = () => {
+      setIsVisible(false);
+    };
+
+    const handleModalClose = () => {
+      setIsVisible(true);
+    };
+
     if (typeof window !== "undefined") {
-      window.addEventListener("scroll", controlNavbar)
-      return () => window.removeEventListener("scroll", controlNavbar)
+      window.addEventListener("scroll", controlNavbar);
+      window.addEventListener("modal-open", handleModalOpen);
+      window.addEventListener("modal-close", handleModalClose);
+      return () => {
+        window.removeEventListener("scroll", controlNavbar);
+        window.removeEventListener("modal-open", handleModalOpen);
+        window.removeEventListener("modal-close", handleModalClose);
+      };
     }
-  }, [lastScrollY])
+  }, [lastScrollY]);
 
   return (
     <nav
