@@ -150,8 +150,8 @@ export function ContactForm() {
                 </p>
                 <p className="leading-relaxed">
                   Email us at:{" "}
-                  <a href="mailto:pranaytalukdar005@gmail.com" className="text-blue-400 hover:underline">
-                    pranaytalukdar005@gmail.com
+                  <a href="mailto:pranay@kmrb.tech" className="text-blue-400 hover:underline">
+                    pranay@kmrb.tech
                   </a>
                 </p>
               </div>
