@@ -81,7 +81,7 @@ export function PlanetModal({ planet, detailedInfo, quickLinks }: PlanetModalPro
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [showShareMenu, setShowShareMenu] = useState(false)
 
-  const images = planetImageGalleries[planet.name] || []
+  const images = planetImageGalleries[planet.name as keyof typeof planetImageGalleries] || []
 
   const nextImage = () => {
     setCurrentImageIndex((prev) => (prev + 1) % images.length)
@@ -113,9 +113,9 @@ export function PlanetModal({ planet, detailedInfo, quickLinks }: PlanetModalPro
   }
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8">
+    <div className="p-4 sm:p-6 lg:p-8 text-white overflow-y-auto">
       {/* Mobile Layout - Stack vertically */}
-      <div className="block lg:hidden space-y-6">
+      <div className="block lg:hidden space-y-6 pb-6">
         {/* Image Gallery - Mobile */}
         <div className="w-full">
           <div className="relative aspect-square max-w-sm mx-auto rounded-2xl overflow-hidden bg-gradient-to-br from-gray-800 to-gray-900">

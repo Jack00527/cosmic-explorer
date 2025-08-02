@@ -5,14 +5,15 @@ import type React from "react"
 import { useRef, useEffect, useState } from "react"
 
 const planets = [
-  { name: "Mercury", emoji: "☿️", color: "text-gray-400" },
-  { name: "Venus", emoji: "♀️", color: "text-yellow-400" },
-  { name: "Earth", emoji: "🌍", color: "text-blue-400" },
-  { name: "Mars", emoji: "♂️", color: "text-red-400" },
-  { name: "Jupiter", emoji: "♃", color: "text-orange-400" },
-  { name: "Saturn", emoji: "♄", color: "text-yellow-300" },
-  { name: "Uranus", emoji: "♅", color: "text-cyan-400" },
-  { name: "Neptune", emoji: "♆", color: "text-blue-500" },
+  { name: "Mercury", color: "text-gray-400", gradient: "from-gray-300 to-gray-600" },
+  { name: "Venus", color: "text-yellow-400", gradient: "from-yellow-200 to-yellow-600" },
+  { name: "Earth", color: "text-blue-400", gradient: "from-blue-300 to-green-500" },
+  { name: "Mars", color: "text-red-400", gradient: "from-red-300 to-red-600" },
+  { name: "Jupiter", color: "text-orange-400", gradient: "from-orange-200 to-orange-500" },
+  { name: "Saturn", color: "text-amber-300", gradient: "from-amber-200 to-amber-500" },
+  { name: "Uranus", color: "text-cyan-400", gradient: "from-cyan-200 to-cyan-600" },
+  { name: "Neptune", color: "text-blue-500", gradient: "from-blue-400 to-blue-700" },
+  { name: "Pluto", color: "text-gray-300", gradient: "from-gray-200 to-gray-500" },
 ]
 
 interface PlanetScrollBarProps {
@@ -113,11 +114,11 @@ export function PlanetScrollBar({
               style={{ scrollSnapAlign: "center" }}
             >
               <div
-                className={`text-4xl md:text-5xl mb-2 transition-all duration-300 ${
-                  selectedPlanet === index || focusedPlanet === index ? "scale-110" : "group-hover:scale-110"
+                className={`w-12 h-12 md:w-14 md:h-14 rounded-full bg-gradient-to-br ${planet.gradient} mb-2 transition-all duration-300 flex items-center justify-center shadow-lg ${
+                  selectedPlanet === index || focusedPlanet === index ? "scale-110 shadow-md shadow-white/20" : "group-hover:scale-110"
                 }`}
               >
-                {planet.emoji}
+                <div className="w-2/3 h-2/3 rounded-full bg-white/10 backdrop-blur-sm"></div>
               </div>
               <div
                 className={`text-sm md:text-base font-medium transition-all duration-300 ${

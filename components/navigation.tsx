@@ -48,11 +48,16 @@ export function Navigation() {
     }
 
     const handleModalOpen = () => {
+      // Always hide navbar when modal opens
       setIsVisible(false);
     };
 
     const handleModalClose = () => {
-      setIsVisible(true);
+      // Only show navbar when scrolling up after modal closes
+      // Let the scroll event handler determine visibility
+      if (window.scrollY < 100) {
+        setIsVisible(true);
+      }
     };
 
     if (typeof window !== "undefined") {

@@ -19,15 +19,18 @@ export function Modal({ isOpen, onClose, children, title }: ModalProps) {
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden"
+      // Ensure modal-open event is dispatched when modal opens
       window.dispatchEvent(new CustomEvent("modal-open"));
     } else {
       document.body.style.overflow = "unset"
       setIsFullscreen(false) // Reset fullscreen when modal closes
+      // Ensure modal-close event is dispatched when modal closes
       window.dispatchEvent(new CustomEvent("modal-close"));
     }
 
     return () => {
       document.body.style.overflow = "unset"
+      // Ensure modal-close event is dispatched when component unmounts while open
       if (isOpen) {
         window.dispatchEvent(new CustomEvent("modal-close"));
       }
@@ -64,7 +67,7 @@ export function Modal({ isOpen, onClose, children, title }: ModalProps) {
       {/* Modal */}
       <div
         className={`relative w-full overflow-hidden rounded-2xl sm:rounded-3xl backdrop-blur-md bg-white/10 border border-white/20 shadow-2xl animate-in fade-in-0 zoom-in-95 duration-300 mt-16 ${
-          isFullscreen ? "h-full max-w-none max-h-none" : "max-w-7xl max-h-[95vh] sm:max-h-[90vh]"
+          isFullscreen ? "h-full max-w-none max-h-none" : "max-w-7xl max-h-[95vh] sm:max-h-[90vh] overflow-y-auto"
         }`}
       >
         {/* Header */}
@@ -91,7 +94,7 @@ export function Modal({ isOpen, onClose, children, title }: ModalProps) {
 
         {/* Content */}
         <div
-          className={`overflow-y-auto ${isFullscreen ? "h-[calc(100vh-80px)]" : "max-h-[calc(95vh-80px)] sm:max-h-[calc(90vh-80px)]"}`}
+          className={`overflow-y-auto ${isFullscreen ? "h-[calc(100vh-80px)]" : "max-h-[calc(95vh-80px)] sm:max-h-[calc(90vh-80px)]"} overflow-x-hidden`}
         >
           {children}
         </div>

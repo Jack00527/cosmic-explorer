@@ -17,7 +17,7 @@ const planets = [
     distance: "57.9 million km",
     atmosphere: "Extremely thin",
     funFact: "A day on Mercury lasts 176 Earth days",
-    image: "/planets/mercury.jpg",
+    image: "/planets/mercury.webp",
     type: "Terrestrial",
   },
   {
@@ -27,7 +27,7 @@ const planets = [
     distance: "108.2 million km",
     atmosphere: "Dense CO₂",
     funFact: "Hottest planet in the solar system at 462°C",
-    image: "/planets/venus.jpg",
+    image: "/planets/venus.webp",
     type: "Terrestrial",
   },
   {
@@ -37,7 +37,7 @@ const planets = [
     distance: "149.6 million km",
     atmosphere: "78% N₂, 21% O₂",
     funFact: "The only known planet with life",
-    image: "/planets/earth.jpg",
+    image: "/planets/earth.webp",
     type: "Terrestrial",
   },
   {
@@ -47,7 +47,7 @@ const planets = [
     distance: "227.9 million km",
     atmosphere: "Thin CO₂",
     funFact: "Home to the largest volcano in the solar system",
-    image: "/planets/mars.jpg",
+    image: "/planets/mars.webp",
     type: "Terrestrial",
   },
   {
@@ -57,7 +57,7 @@ const planets = [
     distance: "778.5 million km",
     atmosphere: "Hydrogen and Helium",
     funFact: "Has over 80 known moons",
-    image: "/planets/jupiter.jpg",
+    image: "/planets/jupiter.webp",
     type: "Gas Giant",
   },
   {
@@ -67,7 +67,7 @@ const planets = [
     distance: "1.43 billion km",
     atmosphere: "Hydrogen and Helium",
     funFact: "Could float in water due to its low density",
-    image: "/planets/saturn.jpg",
+    image: "/planets/saturn.webp",
     type: "Gas Giant",
   },
   {
@@ -77,7 +77,7 @@ const planets = [
     distance: "2.87 billion km",
     atmosphere: "Hydrogen, Helium, Methane",
     funFact: "Rotates on its side at a 98° tilt",
-    image: "/planets/uranus.jpg",
+    image: "/planets/uranus.webp",
     type: "Ice Giant",
   },
   {
@@ -87,8 +87,18 @@ const planets = [
     distance: "4.50 billion km",
     atmosphere: "Hydrogen, Helium, Methane",
     funFact: "Has the fastest winds in the solar system",
-    image: "/planets/neptune.jpg",
+    image: "/planets/neptune.webp",
     type: "Ice Giant",
+  },
+  {
+    name: "Pluto",
+    mass: "1.30 × 10²² kg",
+    radius: "1,188.3 km",
+    distance: "5.90 billion km",
+    atmosphere: "Thin N₂, CH₄",
+    funFact: "Pluto has a heart-shaped region called Tombaugh Regio",
+    image: "/planets/pluto.webp",
+    type: "Dwarf Planet",
   },
 ]
 
@@ -216,6 +226,22 @@ const detailedPlanetsInfo = {
     dayLength: "16.1 hours",
     yearLength: "165 Earth years",
   },
+  8: {
+    // Pluto
+    overview:
+      "Pluto is a dwarf planet in the Kuiper Belt, a ring of bodies beyond Neptune. It was classified as a planet until 2006 when it was reclassified as a dwarf planet.",
+    composition:
+      "Pluto consists of a rocky core surrounded by a water ice mantle and a surface covered with nitrogen, methane, and carbon monoxide ices.",
+    temperature:
+      "Surface temperature averages -229°C (-380°F), making it one of the coldest bodies in our solar system.",
+    exploration:
+      "NASA's New Horizons spacecraft conducted the first and only flyby of Pluto in July 2015, revealing unprecedented details about its surface and atmosphere.",
+    uniqueFeatures:
+      "Pluto has a heart-shaped region called Tombaugh Regio, five known moons (including Charon which is so large that Pluto and Charon orbit a point between them), and a thin atmosphere that expands and contracts as it moves closer to and further from the Sun.",
+    gravity: "0.62 m/s² (6% of Earth)",
+    dayLength: "153 hours",
+    yearLength: "248 Earth years",
+  },
 }
 
 const planetQuickLinks = {
@@ -258,6 +284,11 @@ const planetQuickLinks = {
     // Neptune
     wikipedia: "https://en.wikipedia.org/wiki/Neptune",
     youtube: "https://www.youtube.com/watch?v=1kQ7Zd8_k3I",
+  },
+  8: {
+    // Pluto
+    wikipedia: "https://en.wikipedia.org/wiki/Pluto",
+    youtube: "https://www.youtube.com/watch?v=DHhTZ9YT7uE",
   },
 }
 
@@ -389,9 +420,9 @@ export function PlanetsGrid({ focusedPlanet, onPlanetFocus, onOpenModal }: Plane
       {modalPlanet !== null && (
         <Modal isOpen={modalPlanet !== null} onClose={() => setModalPlanet(null)} title={planets[modalPlanet].name}>
           <PlanetModal
-            planet={planets[modalPlanet]}
-            detailedInfo={detailedPlanetsInfo[modalPlanet]}
-            quickLinks={planetQuickLinks[modalPlanet]}
+            planet={{...planets[modalPlanet], color: "#FFFFFF"}}
+            detailedInfo={detailedPlanetsInfo[modalPlanet as keyof typeof detailedPlanetsInfo]}
+            quickLinks={planetQuickLinks[modalPlanet as keyof typeof planetQuickLinks]}
           />
         </Modal>
       )}
