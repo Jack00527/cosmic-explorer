@@ -1,7 +1,6 @@
 "use client"
 
 import type React from "react"
-
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -24,12 +23,17 @@ export function ContactForm() {
     setSubmissionStatus(null);
 
     try {
-      const response = await fetch("/api/contact", {
+      const response = await fetch("https://formspree.io/f/mblkaykl", {
         method: "POST",
         headers: {
+          Accept: "application/json",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          message: formData.message,
+        }),
       });
 
       if (response.ok) {
@@ -49,8 +53,8 @@ export function ContactForm() {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
-    })
-  }
+    });
+  };
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -116,6 +120,7 @@ export function ContactForm() {
 
               <Button
                 type="submit"
+                disabled={isSubmitting}
                 className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-purple-600 hover:to-pink-600 text-white border-0 py-3 text-lg rounded-xl transition-all duration-300"
               >
                 <Send className="mr-2 h-5 w-5" />
@@ -132,7 +137,7 @@ export function ContactForm() {
           </CardContent>
         </Card>
 
-        {/* Contact Info */}
+        {/* Contact Info and Socials */}
         <div className="space-y-8">
           <Card className="backdrop-blur-md bg-white/5 border border-white/10">
             <CardContent className="p-8">
@@ -158,7 +163,6 @@ export function ContactForm() {
             </CardContent>
           </Card>
 
-          {/* Social Links */}
           <Card className="backdrop-blur-md bg-white/5 border border-white/10">
             <CardContent className="p-8">
               <h3 className="text-xl font-bold text-white mb-6">Connect With Us</h3>
