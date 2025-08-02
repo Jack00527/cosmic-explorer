@@ -200,16 +200,67 @@ export function ComparisonTool({ isOpen, onClose }: ComparisonToolProps) {
   const renderPlanetComparison = () => {
     if (!planet1 || !planet2) return null
 
+    // Helper function to compare numeric values
+    const compareNumeric = (val1, val2) => {
+      // Extract numbers from strings
+      const num1 = parseFloat(val1.replace(/[^0-9.]/g, ''));
+      const num2 = parseFloat(val2.replace(/[^0-9.]/g, ''));
+      
+      if (isNaN(num1) || isNaN(num2)) return null; // Can't compare
+      return num1 > num2 ? 1 : (num2 > num1 ? 2 : 0); // 1 if val1 is greater, 2 if val2 is greater, 0 if equal
+    };
+
+    // Helper function to determine which value is greater
+    const compareValues = (label, val1, val2) => {
+      // For moons, we can directly compare numeric values
+      if (label === "Moons") {
+        const moonCount1 = parseInt(val1.replace(/\+/g, ''));
+        const moonCount2 = parseInt(val2.replace(/\+/g, ''));
+        return moonCount1 > moonCount2 ? 1 : (moonCount2 > moonCount1 ? 2 : 0);
+      }
+      
+      // For gravity, we can extract the numeric part
+      if (label === "Gravity") {
+        return compareNumeric(val1, val2);
+      }
+      
+      // For radius, we can extract the numeric part
+      if (label === "Radius") {
+        return compareNumeric(val1, val2);
+      }
+      
+      // For mass, we need to handle scientific notation
+      if (label === "Mass") {
+        // Extract the exponent
+        const exp1 = val1.match(/10(\^|²|³|⁴|⁵|⁶|⁷|⁸|⁹)(\d+)/);
+        const exp2 = val2.match(/10(\^|²|³|⁴|⁵|⁶|⁷|⁸|⁹)(\d+)/);
+        
+        if (exp1 && exp2) {
+          const expVal1 = parseInt(exp1[2]);
+          const expVal2 = parseInt(exp2[2]);
+          
+          if (expVal1 !== expVal2) {
+            return expVal1 > expVal2 ? 1 : 2;
+          } else {
+            // If exponents are equal, compare the coefficients
+            return compareNumeric(val1, val2);
+          }
+        }
+      }
+      
+      return null; // Can't determine which is greater
+    };
+
     const comparisonData = [
-      { label: "Mass", value1: planet1.mass, value2: planet2.mass },
-      { label: "Radius", value1: planet1.radius, value2: planet2.radius },
-      { label: "Distance from Sun", value1: planet1.distance, value2: planet2.distance },
-      { label: "Atmosphere", value1: planet1.atmosphere, value2: planet2.atmosphere },
-      { label: "Gravity", value1: planet1.gravity, value2: planet2.gravity },
-      { label: "Day Length", value1: planet1.dayLength, value2: planet2.dayLength },
-      { label: "Year Length", value1: planet1.yearLength, value2: planet2.yearLength },
-      { label: "Temperature", value1: planet1.temperature, value2: planet2.temperature },
-      { label: "Moons", value1: planet1.moons, value2: planet2.moons },
+      { label: "Mass", value1: planet1.mass, value2: planet2.mass, greater: compareValues("Mass", planet1.mass, planet2.mass) },
+      { label: "Radius", value1: planet1.radius, value2: planet2.radius, greater: compareValues("Radius", planet1.radius, planet2.radius) },
+      { label: "Distance from Sun", value1: planet1.distance, value2: planet2.distance, greater: compareValues("Distance from Sun", planet1.distance, planet2.distance) },
+      { label: "Atmosphere", value1: planet1.atmosphere, value2: planet2.atmosphere, greater: null },
+      { label: "Gravity", value1: planet1.gravity, value2: planet2.gravity, greater: compareValues("Gravity", planet1.gravity, planet2.gravity) },
+      { label: "Day Length", value1: planet1.dayLength, value2: planet2.dayLength, greater: null },
+      { label: "Year Length", value1: planet1.yearLength, value2: planet2.yearLength, greater: null },
+      { label: "Temperature", value1: planet1.temperature, value2: planet2.temperature, greater: null },
+      { label: "Moons", value1: planet1.moons, value2: planet2.moons, greater: compareValues("Moons", planet1.moons, planet2.moons) },
     ]
 
     return (
@@ -233,7 +284,13 @@ export function ComparisonTool({ isOpen, onClose }: ComparisonToolProps) {
                 {comparisonData.map((item, index) => (
                   <div key={index} className="flex justify-between text-sm">
                     <span className="text-gray-400">{item.label}:</span>
-                    <span className="text-white font-medium">{item.value1}</span>
+                    <span 
+                      className={`font-medium ${item.greater === 1 
+                        ? 'text-blue-300 font-bold text-lg' 
+                        : 'text-white'}`}
+                    >
+                      {item.value1}
+                    </span>
                   </div>
                 ))}
               </div>
@@ -254,7 +311,13 @@ export function ComparisonTool({ isOpen, onClose }: ComparisonToolProps) {
                 {comparisonData.map((item, index) => (
                   <div key={index} className="flex justify-between text-sm">
                     <span className="text-gray-400">{item.label}:</span>
-                    <span className="text-white font-medium">{item.value2}</span>
+                    <span 
+                      className={`font-medium ${item.greater === 2 
+                        ? 'text-blue-300 font-bold text-lg' 
+                        : 'text-white'}`}
+                    >
+                      {item.value2}
+                    </span>
                   </div>
                 ))}
               </div>
@@ -268,15 +331,66 @@ export function ComparisonTool({ isOpen, onClose }: ComparisonToolProps) {
   const renderStarComparison = () => {
     if (!star1 || !star2) return null
 
+    // Helper function to compare ranges
+    const compareRanges = (range1, range2) => {
+      // Extract the upper bounds of ranges like "0.08 - 100 solar masses"
+      const getUpperBound = (range) => {
+        const match = range.match(/- ([\d,]+)/)
+        return match ? parseFloat(match[1].replace(/,/g, '')) : null
+      }
+      
+      const upper1 = getUpperBound(range1)
+      const upper2 = getUpperBound(range2)
+      
+      if (upper1 !== null && upper2 !== null) {
+        return upper1 > upper2 ? 1 : (upper2 > upper1 ? 2 : 0)
+      }
+      return null
+    }
+
+    // Helper function to compare temperature ranges
+    const compareTemperature = (temp1, temp2) => {
+      // Extract the upper bounds of temperature ranges like "2,300 - 50,000 K"
+      const getUpperBound = (temp) => {
+        const match = temp.match(/- ([\d,]+)/)
+        return match ? parseFloat(match[1].replace(/,/g, '')) : null
+      }
+      
+      const upper1 = getUpperBound(temp1)
+      const upper2 = getUpperBound(temp2)
+      
+      if (upper1 !== null && upper2 !== null) {
+        return upper1 > upper2 ? 1 : (upper2 > upper1 ? 2 : 0)
+      }
+      return null
+    }
+
+    // Helper function to compare density
+    const compareDensity = (density1, density2) => {
+      // Extract the upper bounds of density ranges like "0.1 - 150 g/cm³"
+      const getUpperBound = (density) => {
+        const match = density.match(/- ([\d,]+)/)
+        return match ? parseFloat(match[1].replace(/,/g, '')) : null
+      }
+      
+      const upper1 = getUpperBound(density1)
+      const upper2 = getUpperBound(density2)
+      
+      if (upper1 !== null && upper2 !== null) {
+        return upper1 > upper2 ? 1 : (upper2 > upper1 ? 2 : 0)
+      }
+      return null
+    }
+
     const comparisonData = [
-      { label: "Mass", value1: star1.mass, value2: star2.mass },
-      { label: "Radius", value1: star1.radius, value2: star2.radius },
-      { label: "Temperature", value1: star1.temperature, value2: star2.temperature },
-      { label: "Luminosity", value1: star1.luminosity, value2: star2.luminosity },
-      { label: "Lifespan", value1: star1.lifespan, value2: star2.lifespan },
-      { label: "Density", value1: star1.density, value2: star2.density },
-      { label: "Spectral Class", value1: star1.spectralClass, value2: star2.spectralClass },
-      { label: "Examples", value1: star1.examples, value2: star2.examples },
+      { label: "Mass", value1: star1.mass, value2: star2.mass, greater: compareRanges(star1.mass, star2.mass) },
+      { label: "Radius", value1: star1.radius, value2: star2.radius, greater: compareRanges(star1.radius, star2.radius) },
+      { label: "Temperature", value1: star1.temperature, value2: star2.temperature, greater: compareTemperature(star1.temperature, star2.temperature) },
+      { label: "Luminosity", value1: star1.luminosity, value2: star2.luminosity, greater: compareRanges(star1.luminosity, star2.luminosity) },
+      { label: "Lifespan", value1: star1.lifespan, value2: star2.lifespan, greater: compareRanges(star1.lifespan, star2.lifespan) },
+      { label: "Density", value1: star1.density, value2: star2.density, greater: compareDensity(star1.density, star2.density) },
+      { label: "Spectral Class", value1: star1.spectralClass, value2: star2.spectralClass, greater: null },
+      { label: "Examples", value1: star1.examples, value2: star2.examples, greater: null },
     ]
 
     return (
@@ -297,7 +411,13 @@ export function ComparisonTool({ isOpen, onClose }: ComparisonToolProps) {
               {comparisonData.map((item, index) => (
                 <div key={index} className="text-sm">
                   <span className="text-gray-400 block mb-1">{item.label}:</span>
-                  <span className="text-white font-medium">{item.value1}</span>
+                  <span 
+                    className={`font-medium ${item.greater === 1 
+                      ? 'text-blue-300 font-bold text-lg' 
+                      : 'text-white'}`}
+                  >
+                    {item.value1}
+                  </span>
                 </div>
               ))}
             </div>
@@ -320,7 +440,13 @@ export function ComparisonTool({ isOpen, onClose }: ComparisonToolProps) {
               {comparisonData.map((item, index) => (
                 <div key={index} className="text-sm">
                   <span className="text-gray-400 block mb-1">{item.label}:</span>
-                  <span className="text-white font-medium">{item.value2}</span>
+                  <span 
+                    className={`font-medium ${item.greater === 2 
+                      ? 'text-blue-300 font-bold text-lg' 
+                      : 'text-white'}`}
+                  >
+                    {item.value2}
+                  </span>
                 </div>
               ))}
             </div>
@@ -382,69 +508,73 @@ export function ComparisonTool({ isOpen, onClose }: ComparisonToolProps) {
 
           {/* Selection Controls */}
           {comparisonType === "planets" ? (
-            <div className="grid md:grid-cols-2 gap-6 mb-8">
-              <div>
-                <label className="block text-white font-medium mb-2">Select First Planet</label>
-                <Select value={selectedPlanet1} onValueChange={setSelectedPlanet1}>
-                  <SelectTrigger className="bg-white/5 border-white/20 text-white">
-                    <SelectValue placeholder="Choose a planet..." />
-                  </SelectTrigger>
-                  <SelectContent className="bg-gray-900 border-white/20">
-                    {planets.map((planet) => (
-                      <SelectItem key={planet.name} value={planet.name} className="text-white hover:bg-white/10">
-                        {planet.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div>
-                <label className="block text-white font-medium mb-2">Select Second Planet</label>
-                <Select value={selectedPlanet2} onValueChange={setSelectedPlanet2}>
-                  <SelectTrigger className="bg-white/5 border-white/20 text-white">
-                    <SelectValue placeholder="Choose a planet..." />
-                  </SelectTrigger>
-                  <SelectContent className="bg-gray-900 border-white/20">
-                    {planets.map((planet) => (
-                      <SelectItem key={planet.name} value={planet.name} className="text-white hover:bg-white/10">
-                        {planet.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+            <div className="flex justify-center mb-8">
+              <div className="grid md:grid-cols-2 gap-6 max-w-2xl w-full">
+                <div className="text-center">
+                  <label className="block text-white font-medium mb-2">Select First Planet</label>
+                  <Select value={selectedPlanet1} onValueChange={setSelectedPlanet1}>
+                    <SelectTrigger className="bg-white/5 border-white/20 text-white">
+                      <SelectValue placeholder="Choose a planet..." />
+                    </SelectTrigger>
+                    <SelectContent className="bg-gray-900 border-white/20">
+                      {planets.map((planet) => (
+                        <SelectItem key={planet.name} value={planet.name} className="text-white hover:bg-white/10">
+                          {planet.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="text-center">
+                  <label className="block text-white font-medium mb-2">Select Second Planet</label>
+                  <Select value={selectedPlanet2} onValueChange={setSelectedPlanet2}>
+                    <SelectTrigger className="bg-white/5 border-white/20 text-white">
+                      <SelectValue placeholder="Choose a planet..." />
+                    </SelectTrigger>
+                    <SelectContent className="bg-gray-900 border-white/20">
+                      {planets.map((planet) => (
+                        <SelectItem key={planet.name} value={planet.name} className="text-white hover:bg-white/10">
+                          {planet.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
             </div>
           ) : (
-            <div className="grid md:grid-cols-2 gap-6 mb-8">
-              <div>
-                <label className="block text-white font-medium mb-2">Select First Star Type</label>
-                <Select value={selectedStar1} onValueChange={setSelectedStar1}>
-                  <SelectTrigger className="bg-white/5 border-white/20 text-white">
-                    <SelectValue placeholder="Choose a star type..." />
-                  </SelectTrigger>
-                  <SelectContent className="bg-gray-900 border-white/20">
-                    {starTypes.map((star) => (
-                      <SelectItem key={star.name} value={star.name} className="text-white hover:bg-white/10">
-                        {star.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div>
-                <label className="block text-white font-medium mb-2">Select Second Star Type</label>
-                <Select value={selectedStar2} onValueChange={setSelectedStar2}>
-                  <SelectTrigger className="bg-white/5 border-white/20 text-white">
-                    <SelectValue placeholder="Choose a star type..." />
-                  </SelectTrigger>
-                  <SelectContent className="bg-gray-900 border-white/20">
-                    {starTypes.map((star) => (
-                      <SelectItem key={star.name} value={star.name} className="text-white hover:bg-white/10">
-                        {star.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+            <div className="flex justify-center mb-8">
+              <div className="grid md:grid-cols-2 gap-6 max-w-2xl w-full">
+                <div className="text-center">
+                  <label className="block text-white font-medium mb-2">Select First Star Type</label>
+                  <Select value={selectedStar1} onValueChange={setSelectedStar1}>
+                    <SelectTrigger className="bg-white/5 border-white/20 text-white">
+                      <SelectValue placeholder="Choose a star type..." />
+                    </SelectTrigger>
+                    <SelectContent className="bg-gray-900 border-white/20">
+                      {starTypes.map((star) => (
+                        <SelectItem key={star.name} value={star.name} className="text-white hover:bg-white/10">
+                          {star.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="text-center">
+                  <label className="block text-white font-medium mb-2">Select Second Star Type</label>
+                  <Select value={selectedStar2} onValueChange={setSelectedStar2}>
+                    <SelectTrigger className="bg-white/5 border-white/20 text-white">
+                      <SelectValue placeholder="Choose a star type..." />
+                    </SelectTrigger>
+                    <SelectContent className="bg-gray-900 border-white/20">
+                      {starTypes.map((star) => (
+                        <SelectItem key={star.name} value={star.name} className="text-white hover:bg-white/10">
+                          {star.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
             </div>
           )}

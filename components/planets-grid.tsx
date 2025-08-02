@@ -367,11 +367,21 @@ export function PlanetsGrid({ focusedPlanet, onPlanetFocus, onOpenModal }: Plane
               </div>
 
               <div className="w-20 h-20 mx-auto mb-6">
-                <img
-                  src={planet.image}
-                  alt={planet.name}
-                  className={`w-full h-full rounded-full object-cover shadow-lg transition-transform duration-300 ${focusedPlanet === index ? "animate-pulse-glow scale-110" : ""}`}
-                />
+                <div
+                  className={`w-full h-full rounded-full bg-gradient-to-br ${planets[index].name === "Mercury" ? "from-gray-300 to-gray-600" :
+                    planets[index].name === "Venus" ? "from-yellow-200 to-yellow-600" :
+                    planets[index].name === "Earth" ? "from-blue-300 to-green-500" :
+                    planets[index].name === "Mars" ? "from-red-300 to-red-600" :
+                    planets[index].name === "Jupiter" ? "from-orange-200 to-orange-500" :
+                    planets[index].name === "Saturn" ? "from-amber-200 to-amber-500" :
+                    planets[index].name === "Uranus" ? "from-cyan-200 to-cyan-600" :
+                    planets[index].name === "Neptune" ? "from-blue-400 to-blue-700" :
+                    planets[index].name === "Pluto" ? "from-gray-200 to-gray-500" :
+                    "from-purple-300 to-purple-600"
+                  } shadow-lg transition-transform duration-300 flex items-center justify-center ${focusedPlanet === index ? "animate-pulse-glow scale-110" : ""}`}
+                >
+                  <div className="w-2/3 h-2/3 rounded-full bg-white/10 backdrop-blur-sm"></div>
+                </div>
               </div>
 
               <div className="space-y-3 text-sm">

@@ -191,6 +191,20 @@ export function ContactForm() {
                 >
                   <Instagram className="h-6 w-6 text-white" />
                 </a>
+                <a
+                  href="https://in.linkedin.com/in/pranay-talukdar-043a40370"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-12 h-12 rounded-xl bg-gradient-to-r from-blue-700 to-blue-900 flex items-center justify-center hover:from-blue-800 hover:to-blue-950 transition-all duration-300 transform hover:scale-110"
+                >
+                  <svg
+                    className="h-6 w-6 text-white"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M19 0h-14c-2.76 0-5 2.24-5 5v14c0 2.76 2.24 5 5 5h14c2.76 0 5-2.24 5-5v-14c0-2.76-2.24-5-5-5zm-11.47 20h-3v-10h3v10zm-1.5-11.26c-.97 0-1.76-.79-1.76-1.76 0-.97.79-1.76 1.76-1.76s1.76.79 1.76 1.76c0 .97-.79 1.76-1.76 1.76zm13.97 11.26h-3v-5.6c0-1.34-.03-3.06-1.87-3.06-1.87 0-2.16 1.46-2.16 2.96v5.7h-3v-10h2.88v1.37h.04c.4-.75 1.36-1.54 2.8-1.54 3 0 3.56 1.98 3.56 4.56v5.61z" />
+                  </svg>
+                </a>
               </div>
             </CardContent>
           </Card>

@@ -33,47 +33,52 @@ interface PlanetModalProps {
   }
 }
 
-// Mock image gallery data - in a real app, these would be actual planet images
+// Planet image gallery data using actual planet images
 const planetImageGalleries = {
   Mercury: [
-    "/placeholder.svg?height=400&width=400&text=Mercury+Surface",
+    "/planets/mercury.jpg",
     "/placeholder.svg?height=400&width=400&text=Mercury+Craters",
     "/placeholder.svg?height=400&width=400&text=Mercury+Transit",
   ],
   Venus: [
-    "/placeholder.svg?height=400&width=400&text=Venus+Surface",
+    "/planets/venus.jpg",
     "/placeholder.svg?height=400&width=400&text=Venus+Clouds",
     "/placeholder.svg?height=400&width=400&text=Venus+Radar+Map",
   ],
   Earth: [
-    "/placeholder.svg?height=400&width=400&text=Earth+Blue+Marble",
+    "/planets/earth.jpg",
     "/placeholder.svg?height=400&width=400&text=Earth+Night+Lights",
     "/placeholder.svg?height=400&width=400&text=Earth+From+Space",
   ],
   Mars: [
-    "/placeholder.svg?height=400&width=400&text=Mars+Surface",
+    "/planets/mars.jpg",
     "/placeholder.svg?height=400&width=400&text=Mars+Polar+Caps",
     "/placeholder.svg?height=400&width=400&text=Mars+Olympus+Mons",
   ],
   Jupiter: [
-    "/placeholder.svg?height=400&width=400&text=Jupiter+Great+Red+Spot",
+    "/planets/jupiter.jpg",
     "/placeholder.svg?height=400&width=400&text=Jupiter+Moons",
     "/placeholder.svg?height=400&width=400&text=Jupiter+Storms",
   ],
   Saturn: [
-    "/placeholder.svg?height=400&width=400&text=Saturn+Rings",
+    "/planets/saturn.jpg",
     "/placeholder.svg?height=400&width=400&text=Saturn+Hexagon",
     "/placeholder.svg?height=400&width=400&text=Saturn+Moons",
   ],
   Uranus: [
-    "/placeholder.svg?height=400&width=400&text=Uranus+Tilted",
+    "/planets/uranus.jpg",
     "/placeholder.svg?height=400&width=400&text=Uranus+Rings",
     "/placeholder.svg?height=400&width=400&text=Uranus+Moons",
   ],
   Neptune: [
-    "/placeholder.svg?height=400&width=400&text=Neptune+Blue",
+    "/planets/neptune.jpg",
     "/placeholder.svg?height=400&width=400&text=Neptune+Storms",
     "/placeholder.svg?height=400&width=400&text=Neptune+Triton",
+  ],
+  Pluto: [
+    "/planets/pluto.jpg",
+    "/placeholder.svg?height=400&width=400&text=Pluto+Heart",
+    "/placeholder.svg?height=400&width=400&text=Pluto+Surface",
   ],
 }
 
@@ -358,12 +363,14 @@ export function PlanetModal({ planet, detailedInfo, quickLinks }: PlanetModalPro
         <div className="space-y-6">
           {/* Image Gallery - Desktop */}
           <div className="relative">
-            <div className="aspect-square w-full rounded-2xl overflow-hidden bg-gradient-to-br from-gray-800 to-gray-900">
-              <img
-                src={images[currentImageIndex] || `/placeholder.svg?height=400&width=400&text=${planet.name}`}
-                alt={`${planet.name} - Image ${currentImageIndex + 1}`}
-                className="w-full h-full object-cover"
-              />
+            <div className="aspect-square w-full rounded-2xl overflow-hidden bg-black">
+              <div className="w-full h-full flex items-center justify-center">
+                <img
+                  src={images[currentImageIndex] || `/placeholder.svg?height=400&width=400&text=${planet.name}`}
+                  alt={`${planet.name} - Image ${currentImageIndex + 1}`}
+                  className="max-w-full max-h-full object-contain"
+                />
+              </div>
 
               {/* Gallery Navigation */}
               {images.length > 1 && (

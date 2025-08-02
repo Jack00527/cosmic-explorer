@@ -38,6 +38,22 @@ export default function RootLayout({
           <Navigation />
           <main className="relative z-10">{children}</main>
         </div>
+        <footer className="mt-16 text-center py-10">
+  <p className="text-base md:text-lg font-semibold">
+    <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-500 text-transparent bg-clip-text animate-pulse">
+      Made and built by Pranay
+    </span>
+    <br />
+    <a
+      href="https://kmrb.tech"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="inline-block mt-2 bg-gradient-to-r from-yellow-400 to-yellow-300 text-transparent bg-clip-text animate-pulse hover:underline"
+    >
+      Special thanks to my team KMRB 🚀
+    </a>
+  </p>
+</footer>
       </body>
     </html>
   )
