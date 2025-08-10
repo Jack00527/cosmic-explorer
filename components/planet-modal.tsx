@@ -85,6 +85,7 @@ const planetImageGalleries = {
 export function PlanetModal({ planet, detailedInfo, quickLinks }: PlanetModalProps) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [showShareMenu, setShowShareMenu] = useState(false)
+  const [activeTab, setActiveTab] = useState<'overview' | 'science' | 'exploration' | 'habitability' | 'faq'>('overview')
 
   const images = planetImageGalleries[planet.name as keyof typeof planetImageGalleries] || []
 
@@ -555,42 +556,106 @@ export function PlanetModal({ planet, detailedInfo, quickLinks }: PlanetModalPro
             </div>
           </div>
 
-          {/* Content Sections - Desktop */}
+          {/* Content Sections - Desktop with tabs for richer info */}
           <div className="space-y-6">
-            <div className="backdrop-blur-md bg-white/5 border border-white/10 rounded-2xl p-6">
-              <h3 className="text-xl font-bold text-blue-300 mb-4 flex items-center gap-2">
-                <span className="text-2xl">📖</span> Overview
-              </h3>
-              <p className="text-gray-300 leading-relaxed">{detailedInfo.overview}</p>
+            <div className="backdrop-blur-md bg-white/5 border border-white/10 rounded-2xl p-3">
+              <div className="flex flex-wrap gap-2">
+                {[
+                  { key: 'overview', label: 'Overview' },
+                  { key: 'science', label: 'Science & Structure' },
+                  { key: 'exploration', label: 'Missions' },
+                  { key: 'habitability', label: 'Habitability' },
+                  { key: 'faq', label: 'FAQ' },
+                ].map(({ key, label }) => (
+                  <button
+                    key={key}
+                    onClick={() => setActiveTab(key as any)}
+                    className={`px-3 py-2 rounded-xl text-sm transition-all ${
+                      activeTab === (key as any)
+                        ? 'bg-white/20 text-white'
+                        : 'text-gray-300 hover:text-white hover:bg-white/10'
+                    }`}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
             </div>
 
-            <div className="backdrop-blur-md bg-white/5 border border-white/10 rounded-2xl p-6">
-              <h3 className="text-xl font-bold text-blue-300 mb-4 flex items-center gap-2">
-                <span className="text-2xl">🧱</span> Composition & Structure
-              </h3>
-              <p className="text-gray-300 leading-relaxed">{detailedInfo.composition}</p>
-            </div>
+            {activeTab === 'overview' && (
+              <div className="backdrop-blur-md bg-white/5 border border-white/10 rounded-2xl p-6">
+                <h3 className="text-xl font-bold text-blue-300 mb-4 flex items-center gap-2">
+                  <span className="text-2xl">📖</span> Overview
+                </h3>
+                <p className="text-gray-300 leading-relaxed">{detailedInfo.overview}</p>
+              </div>
+            )}
 
-            <div className="backdrop-blur-md bg-white/5 border border-white/10 rounded-2xl p-6">
-              <h3 className="text-xl font-bold text-blue-300 mb-4 flex items-center gap-2">
-                <span className="text-2xl">🌡️</span> Temperature & Climate
-              </h3>
-              <p className="text-gray-300 leading-relaxed">{detailedInfo.temperature}</p>
-            </div>
+            {activeTab === 'science' && (
+              <div className="space-y-6">
+                <div className="backdrop-blur-md bg-white/5 border border-white/10 rounded-2xl p-6">
+                  <h3 className="text-xl font-bold text-blue-300 mb-4 flex items-center gap-2">
+                    <span className="text-2xl">🧱</span> Composition & Structure
+                  </h3>
+                  <p className="text-gray-300 leading-relaxed">{detailedInfo.composition}</p>
+                </div>
+                <div className="backdrop-blur-md bg-white/5 border border-white/10 rounded-2xl p-6">
+                  <h3 className="text-xl font-bold text-blue-300 mb-4 flex items-center gap-2">
+                    <span className="text-2xl">🌡️</span> Temperature & Climate
+                  </h3>
+                  <p className="text-gray-300 leading-relaxed">{detailedInfo.temperature}</p>
+                </div>
+              </div>
+            )}
 
-            <div className="backdrop-blur-md bg-white/5 border border-white/10 rounded-2xl p-6">
-              <h3 className="text-xl font-bold text-blue-300 mb-4 flex items-center gap-2">
-                <span className="text-2xl">🚀</span> Exploration History
-              </h3>
-              <p className="text-gray-300 leading-relaxed">{detailedInfo.exploration}</p>
-            </div>
+            {activeTab === 'exploration' && (
+              <div className="backdrop-blur-md bg-white/5 border border-white/10 rounded-2xl p-6 space-y-4">
+                <h3 className="text-xl font-bold text-blue-300 flex items-center gap-2">
+                  <span className="text-2xl">🚀</span> Exploration History
+                </h3>
+                <p className="text-gray-300 leading-relaxed">{detailedInfo.exploration}</p>
+                <ul className="list-disc list-inside text-gray-300 space-y-1">
+                  <li>Key missions: Mariner, Voyager, Cassini, Juno, Perseverance (varies by planet)</li>
+                  <li>Recent discoveries and ongoing research programs</li>
+                  <li>Future mission concepts and goals</li>
+                </ul>
+              </div>
+            )}
 
-            <div className="backdrop-blur-md bg-white/5 border border-white/10 rounded-2xl p-6">
-              <h3 className="text-xl font-bold text-blue-300 mb-4 flex items-center gap-2">
-                <span className="text-2xl">✨</span> Unique Features
-              </h3>
-              <p className="text-gray-300 leading-relaxed">{detailedInfo.uniqueFeatures}</p>
-            </div>
+            {activeTab === 'habitability' && (
+              <div className="backdrop-blur-md bg-white/5 border border-white/10 rounded-2xl p-6 space-y-4">
+                <h3 className="text-xl font-bold text-blue-300 flex items-center gap-2">
+                  <span className="text-2xl">🧬</span> Habitability & Potential for Life
+                </h3>
+                <p className="text-gray-300">Surface and atmospheric conditions impacting liquid water stability, radiation, and chemistry.</p>
+                <div className="grid sm:grid-cols-2 gap-4 text-sm">
+                  <div className="backdrop-blur-md bg-white/5 border border-white/10 rounded-xl p-4">
+                    <span className="text-gray-400 block mb-1">Energy Sources</span>
+                    <span className="text-white">Solar input, geothermal activity, tidal heating</span>
+                  </div>
+                  <div className="backdrop-blur-md bg-white/5 border border-white/10 rounded-xl p-4">
+                    <span className="text-gray-400 block mb-1">Liquid Solvents</span>
+                    <span className="text-white">Water, methane/ethane (Titan), subsurface oceans (Europa/Enceladus)</span>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'faq' && (
+              <div className="backdrop-blur-md bg-white/5 border border-white/10 rounded-2xl p-6 space-y-3">
+                <h3 className="text-xl font-bold text-blue-300 flex items-center gap-2">
+                  <span className="text-2xl">❓</span> Frequently Asked Questions
+                </h3>
+                <div>
+                  <p className="text-white font-medium">Why is {planet.name} unique?</p>
+                  <p className="text-gray-300">{detailedInfo.uniqueFeatures}</p>
+                </div>
+                <div>
+                  <p className="text-white font-medium">Can we visit or live there?</p>
+                  <p className="text-gray-300">Mission feasibility depends on distance, environment, and technology readiness.</p>
+                </div>
+              </div>
+            )}
 
             <div className="backdrop-blur-md bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-purple-400/20 rounded-2xl p-6">
               <h3 className="text-xl font-bold text-purple-300 mb-4 flex items-center gap-2">

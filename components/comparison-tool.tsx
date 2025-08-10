@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -189,6 +189,24 @@ export function ComparisonTool({ isOpen, onClose }: ComparisonToolProps) {
   const [selectedStar1, setSelectedStar1] = useState<string>("")
   const [selectedStar2, setSelectedStar2] = useState<string>("")
   const [comparisonType, setComparisonType] = useState<"planets" | "stars">("planets")
+
+  // Lock scroll and notify navbar when this modal opens/closes
+  useEffect(() => {
+    if (!isOpen) return
+    document.body.style.overflow = "hidden"
+    window.dispatchEvent(new CustomEvent("modal-open"))
+
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose()
+    }
+    document.addEventListener("keydown", handleEscape)
+
+    return () => {
+      document.body.style.overflow = "unset"
+      window.dispatchEvent(new CustomEvent("modal-close"))
+      document.removeEventListener("keydown", handleEscape)
+    }
+  }, [isOpen, onClose])
 
   if (!isOpen) return null
 
@@ -457,17 +475,17 @@ export function ComparisonTool({ isOpen, onClose }: ComparisonToolProps) {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-2 sm:p-4">
       {/* Backdrop */}
       <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
 
       {/* Modal */}
-      <div className="relative w-full max-w-7xl max-h-[90vh] overflow-hidden rounded-3xl backdrop-blur-md bg-white/10 border border-white/20 shadow-2xl animate-in fade-in-0 zoom-in-95 duration-300">
+      <div className="relative w-full overflow-hidden rounded-2xl sm:rounded-3xl backdrop-blur-md bg-white/10 border border-white/20 shadow-2xl animate-in fade-in-0 zoom-in-95 duration-300 max-w-7xl max-h-[95vh] sm:max-h-[90vh]">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-white/10 bg-white/5">
+        <div className="flex items-center justify-between p-4 sm:p-6 border-b border-white/10 bg-white/5">
           <div className="flex items-center gap-3">
             <ArrowLeftRight className="h-6 w-6 text-blue-400" />
-            <h2 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+            <h2 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
               Comparison Tool
             </h2>
           </div>
@@ -477,7 +495,7 @@ export function ComparisonTool({ isOpen, onClose }: ComparisonToolProps) {
         </div>
 
         {/* Content */}
-        <div className="overflow-y-auto max-h-[calc(90vh-80px)] p-6">
+        <div className="overflow-y-auto max-h-[calc(90vh-80px)] p-4 sm:p-6">
           {/* Type Selection */}
           <div className="flex justify-center mb-8">
             <div className="flex bg-white/5 rounded-xl p-1">

@@ -22,6 +22,7 @@ export function Navigation() {
   const [isVisible, setIsVisible] = useState(true)
   const [lastScrollY, setLastScrollY] = useState(0)
   const [isScrolled, setIsScrolled] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false)
   const pathname = usePathname()
 
   useEffect(() => {
@@ -48,17 +49,16 @@ export function Navigation() {
     }
 
     const handleModalOpen = () => {
-      // Always hide navbar when modal opens
-      setIsVisible(false);
-    };
+      setIsModalOpen(true)
+      setIsVisible(false)
+    }
 
     const handleModalClose = () => {
-      // Only show navbar when scrolling up after modal closes
-      // Let the scroll event handler determine visibility
+      setIsModalOpen(false)
       if (window.scrollY < 100) {
-        setIsVisible(true);
+        setIsVisible(true)
       }
-    };
+    }
 
     if (typeof window !== "undefined") {
       window.addEventListener("scroll", controlNavbar);
@@ -74,9 +74,9 @@ export function Navigation() {
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 p-4 transition-transform duration-300 ${
-        isVisible ? "translate-y-0" : "-translate-y-full"
-      }`}
+      className={`fixed top-0 left-0 right-0 z-40 p-4 transition-transform duration-300 ${
+        isVisible && !isModalOpen ? "translate-y-0" : "-translate-y-full"
+      } ${isModalOpen ? "opacity-0 pointer-events-none" : "opacity-100"}`}
     >
       <div className="container mx-auto">
         <div

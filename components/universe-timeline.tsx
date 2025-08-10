@@ -180,9 +180,10 @@ export function UniverseTimeline() {
 
   return (
     <div className="relative max-w-4xl mx-auto">
-      <div className="absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-gradient-to-b from-red-400 via-yellow-400 via-green-400 via-blue-400 to-purple-400 rounded-full" />
+      {/* Desktop vertical timeline */}
+      <div className="hidden md:block absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-gradient-to-b from-red-400 via-yellow-400 to-purple-400 rounded-full" />
 
-      <div className="space-y-12">
+      <div className="hidden md:block space-y-12">
         {timelineEvents.map((event, index) => (
           <div key={index} className={`flex items-center ${index % 2 === 0 ? "flex-row" : "flex-row-reverse"}`}>
             <div className={`w-1/2 ${index % 2 === 0 ? "pr-8 text-right" : "pl-8"}`}>
@@ -256,6 +257,55 @@ export function UniverseTimeline() {
             <div className="w-1/2" />
           </div>
         ))}
+      </div>
+
+      {/* Mobile horizontal timeline */}
+      <div className="md:hidden">
+        <div className="overflow-x-auto scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent">
+          <div className="relative flex items-stretch gap-4 px-2">
+            <div className="absolute left-0 right-0 top-10 h-1 bg-gradient-to-r from-red-400 via-yellow-400 to-purple-400 rounded-full" />
+            {timelineEvents.map((event, index) => (
+              <div key={index} className="relative min-w-[280px] pt-8">
+                <div className="absolute left-1/2 -translate-x-1/2 top-8 w-4 h-4 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full border-4 border-gray-950 z-10" />
+                <Card className="backdrop-blur-md bg-white/5 border border-white/10 hover:bg-white/10 transition-all duration-300 cursor-pointer"
+                  onClick={() => setExpandedTimeline(expandedTimeline === index ? null : index)}>
+                  <CardContent className="p-4">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Badge variant="secondary" className="bg-white/10 text-white border-white/20 text-xs">
+                        {event.era}
+                      </Badge>
+                      <div className={`w-3 h-3 rounded-full bg-gradient-to-r ${event.color}`} />
+                    </div>
+                    <h3 className="text-base font-bold text-white mb-1 whitespace-nowrap">{event.event}</h3>
+                    <p className="text-xs text-blue-300 mb-2">{event.time}</p>
+                    <p className="text-gray-300 text-sm">{event.description}</p>
+
+                    {expandedTimeline === index && (
+                      <div className="mt-3 pt-3 border-t border-white/10 space-y-3 text-sm">
+                        <div>
+                          <h4 className="text-green-300 font-semibold mb-1">Scientific Details</h4>
+                          <p className="text-gray-300 leading-relaxed text-xs">{detailedTimelineInfo[index].scientificDetails}</p>
+                        </div>
+                        <div>
+                          <h4 className="text-green-300 font-semibold mb-1">Evidence</h4>
+                          <p className="text-gray-300 leading-relaxed text-xs">{detailedTimelineInfo[index].evidence}</p>
+                        </div>
+                        <div>
+                          <h4 className="text-green-300 font-semibold mb-1">Temperature</h4>
+                          <p className="text-gray-300 leading-relaxed text-xs">{detailedTimelineInfo[index].temperature}</p>
+                        </div>
+                        <div>
+                          <h4 className="text-green-300 font-semibold mb-1">Significance</h4>
+                          <p className="text-gray-300 leading-relaxed text-xs">{detailedTimelineInfo[index].significance}</p>
+                        </div>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   )
