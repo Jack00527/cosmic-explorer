@@ -1,6 +1,7 @@
 import { Hero } from "@/components/hero"
 import { FeaturedSections } from "@/components/featured-sections"
 import { Stats } from "@/components/stats"
+import IntroRoot from "@/components/intro-root"
 
 type NASAFeedItem = {
   title: string
@@ -24,6 +25,8 @@ export default async function Home() {
 
   return (
     <>
+      {/* Intro overlay rendered above the homepage content; unmounts after launch */}
+      <IntroRoot />
       <Hero />
       <Stats />
       <FeaturedSections />

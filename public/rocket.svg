@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256" fill="none">
+  <defs>
+    <linearGradient id="b" x1="128" y1="16" x2="128" y2="240" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#d1d5db"/>
+    </linearGradient>
+    <linearGradient id="a" x1="128" y1="88" x2="128" y2="168" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#60a5fa"/>
+      <stop offset="1" stop-color="#a78bfa"/>
+    </linearGradient>
+  </defs>
+  <g filter="url(#shadow)">
+    <path d="M128 16c40 24 72 88 72 128 0 32-8 48-24 64-12 12-32 16-48 16s-36-4-48-16c-16-16-24-32-24-64 0-40 32-104 72-128Z" fill="url(#b)"/>
+    <circle cx="128" cy="128" r="36" fill="url(#a)"/>
+    <circle cx="128" cy="128" r="16" fill="#0ea5e9"/>
+    <path d="M76 188c-8 16-20 28-36 36 12-24 16-48 16-72 8 8 16 20 20 36Z" fill="#ef4444"/>
+    <path d="M180 188c8 16 20 28 36 36-12-24-16-48-16-72-8 8-16 20-20 36Z" fill="#f59e0b"/>
+    <path d="M112 224c-4 8-8 16-16 24 16-4 28-8 40-8s24 4 40 8c-8-8-12-16-16-24-8 0-16 0-24 0s-16 0-24 0Z" fill="#9ca3af"/>
+  </g>
+  <filter id="shadow" x="0" y="0" width="256" height="256" filterUnits="userSpaceOnUse">
+    <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="rgba(0,0,0,0.4)"/>
+  </filter>
+</svg>
+
+

@@ -53,12 +53,12 @@ export function Hero() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Link href="/planets">
+            <Link href="/3d-view">
               <Button
                 size="lg"
                 className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-purple-600 hover:to-pink-600 text-white border-0 px-8 py-4 text-lg rounded-xl transition-all duration-300 transform hover:scale-105"
               >
-                Start Exploring
+                3D View
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </Link>
